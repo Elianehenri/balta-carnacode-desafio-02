@@ -6,11 +6,11 @@ public class BMIModel
 {
 	[Required(ErrorMessage = "A altura é obrigatória.")]
 	[Range(0.01, double.MaxValue, ErrorMessage = "A altura é inválida.")]
-	public string Altura { get; set; }
+	public double? Altura { get; set; }
 
 	[Required(ErrorMessage = "O peso é obrigatório.")]
 	[Range(1.0, double.MaxValue, ErrorMessage = "O peso é inválido.")]
-	public string Peso { get; set; }
+	public double? Peso { get; set; }
 
 	[Required(ErrorMessage = "O sexo é obrigatório.")]
 	public string Sexo { get; set; }
@@ -23,10 +23,10 @@ public class BMIModel
 
 	public void CalcularImc()
 	{
-		if (!double.TryParse(Altura, out var altura) || !double.TryParse(Peso, out var peso)) return;
+		if (Altura is null || Peso is null) return;
 
-		var alturaMetros = altura / 100.0;
-		var imc = peso / (alturaMetros * alturaMetros);
+		var alturaMetros = Altura / 100.0;
+		var imc = Peso / (alturaMetros * alturaMetros);
 
 		// Preenche as propriedades do modelo
 		ImcCalculado = imc;

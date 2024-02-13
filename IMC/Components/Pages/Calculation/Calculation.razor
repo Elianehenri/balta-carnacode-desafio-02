@@ -3,7 +3,7 @@
 @using IMC.Extensions
 @using IMC.Services
 @inject NavigationManager Navigation
-@inject Microsoft.JSInterop.IJSRuntime JSRuntime
+@inject IJSRuntime JSRuntime
 @inject IBmiService BmiService;
 
 <link rel="stylesheet" href="Calculation.razor.css" />
@@ -18,10 +18,10 @@
         <ValidationSummary />
 
         <div class="input-container">
-            <InputText id="input-altura" class="input-text input-spacing" @bind-Value="@_model.Altura" placeholder="Altura" />
+            <InputNumber id="input-altura" class="input-text input-spacing" @bind-Value="@_model.Altura" placeholder="Altura (cm)" />
             <ValidationMessage For="@(() => _model.Altura)" />
 
-            <InputText id="input-peso" class="input-text input-spacing" @bind-Value="@_model.Peso" placeholder="Peso" />
+            <InputNumber id="input-peso" class="input-text input-spacing" @bind-Value="@_model.Peso" placeholder="Peso (kg)" />
             <ValidationMessage For="@(() => _model.Peso)" />
 
             <InputText id="input-sexo" class="input-text input-spacing" @bind-Value="@_model.Sexo" placeholder="Sexo" />
@@ -53,7 +53,7 @@
     private async Task HandleSubmit()
     {
         // Verificar se os campos obrigatórios estão preenchidos antes de prosseguir
-        if (string.IsNullOrWhiteSpace(_model.Altura) || string.IsNullOrWhiteSpace(_model.Peso) || string.IsNullOrWhiteSpace(_model.Sexo))
+        if (_model.Altura is null || _model.Peso is null || string.IsNullOrWhiteSpace(_model.Sexo))
         {
             await JSRuntime.InvokeVoidAsync("alert", "Por favor, preencha todos os campos obrigatórios.");
             return;
@@ -73,7 +73,7 @@
 
     private async Task ShowImcAlert()
     {
-        if (!string.IsNullOrWhiteSpace(_model.Altura) && !string.IsNullOrWhiteSpace(_model.Peso))
+        if (_model.Altura is not null && _model.Peso is not null)
         {
             if (_model.ImcCalculado != null)
             {
