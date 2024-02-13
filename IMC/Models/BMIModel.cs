@@ -34,5 +34,10 @@ namespace IMC.Models
         public string Sexo { get; set; }
 
         public bool Mais65Anos { get; set; }
+
+
+        public DateTime DataCalculo { get; set; }
+        public Double ValorCalculado { get; set; }
+
     }
 }
