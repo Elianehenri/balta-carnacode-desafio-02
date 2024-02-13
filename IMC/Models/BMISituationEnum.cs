@@ -1,6 +1,8 @@
 ﻿
 using System.ComponentModel;
 
+namespace IMC.Models;
+
 public enum BMISituationEnum
 {
     [Description("Muito abaixo do peso")]

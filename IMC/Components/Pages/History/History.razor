@@ -1,12 +1,13 @@
 ﻿@page "/history"
 @using IMC.Services
 @using IMC.Models
+@using IMC.Extensions
 @inject IBmiService BmiService;
 
 
 <link rel="stylesheet" href="History.razor.css" />
 
-<main class="container">
+<div class="container">
 	<div class="imagem">
 		<div class="logo">
 			<img src="./assets/icon-no-bg.png" alt="Logo da aplicação">
@@ -33,7 +34,7 @@
 			</div>
 		}
 	</div>
-</main>
+</div>
 
 @code {
 	private List<RegistroHistoricoViewModel> _bmiHistory = new ();
@@ -51,10 +52,17 @@
 	{
 		private const string CssIconeOk = "custom-icon-verde fa-solid fa-square-check";
 		private const string CssIconeRuim = "custom-icon-vermelho fa-solid fa-circle-minus";
-
-		private const string MensagemPesoIdeal = "Parabéns, você está no seu peso ideal, continue mantendo este estilo!";
-		private const string MensagemSobrepeso = "Estamos quase lá! Faça alguns ajustes para ficar no peso ideal!";
-		private const string MensagemAbaixoPeso = "Estamos quase lá! Tente comer mais vezes ao longo do dia!";
+		
+		private static readonly IReadOnlyDictionary<BMISituationEnum, string> Mensagens = new Dictionary<BMISituationEnum, string>
+		{
+			{ BMISituationEnum.MuitoAbaixoDoPeso, "Você precisa se cuidar, está muito abaixo do peso!" },
+			{ BMISituationEnum.AbaixoDoPeso, "Estamos quase lá! Tente comer mais vezes ao longo do dia!" },
+			{ BMISituationEnum.PesoNormal, "Parabéns, você está no seu peso ideal, continue mantendo este estilo!" },
+			{ BMISituationEnum.AcimaDoPeso, "Estamos quase lá! Faça alguns ajustes para ficar no peso ideal!" },
+			{ BMISituationEnum.ObesidadeI, "Atenção você está muito acima do peso!" },
+			{ BMISituationEnum.ObesidadeII, "Cuiddo redobrado! Você está muito acima do peso!" },
+			{ BMISituationEnum.ObesidadeIII, "Procure um médico. Você está muito acima do peso!" },
+		};
 
 		public string Titulo {get; set;}
 		public string CssIcone { get; set; }
@@ -63,26 +71,21 @@
 
 		public RegistroHistoricoViewModel(BMIModel bmi)
 		{
-			var peso = int.Parse(bmi.Peso);
-			Titulo = peso > 60
-				? "Sobrepeso"
-				: "Peso ideal";
+			Titulo = bmi.Situacao.GetEnumDescription();
 
-			CssIcone = bmi.
+			CssIcone = bmi.Situacao == BMISituationEnum.PesoNormal
 				? CssIconeOk
 				: CssIconeRuim;
 
-			var data = new DateTime(2024, 02, 12);
-			var dataDif = (DateTime.Now - data);
+			var dataDif = (DateTime.UtcNow - bmi.DataCalculo);
 			TextoDataHora = dataDif.Hours < 1
 				? $"{dataDif.Minutes}m atrás"
-				: data.ToShortDateString();
+				: bmi.DataCalculo
+					.ToLocalTime()
+					.ToShortDateString();
 
-			Texto = peso > 80
-				? MensagemSobrepeso
-				: peso > 55
-					? MensagemPesoIdeal
-					: MensagemAbaixoPeso;
+
+			Texto = Mensagens[bmi.Situacao];
 		}
 	}
 }

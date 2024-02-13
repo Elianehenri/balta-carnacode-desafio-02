@@ -1,6 +1,7 @@
 ﻿@page "/"
 
 @using System.ComponentModel.DataAnnotations
+@using IMC.Extensions
 @using IMC.Models
 @using IMC.Services
 @inject NavigationManager navigation
@@ -58,7 +59,7 @@
                 model.Situacao = model.GetSituacao();
                 
                 // Exibe o resultado do IMC
-                await JSRuntime.InvokeVoidAsync("alert", $"Seu IMC é: {imc:F2}. Situação: {model.Situacao}");
+                await JSRuntime.InvokeVoidAsync("alert", $"Seu IMC é: {imc:F2}. Situação: {model.Situacao.GetEnumDescription()}");
             }
             else
             {
@@ -69,7 +70,10 @@
         {
             await JSRuntime.InvokeVoidAsync("alert", "Por favor, preencha todos os campos obrigatórios.");
         }
+        
         BmiService.Adicionar(model);
+        navigation.NavigateTo("history");
+
     }
 
        private async Task HandleEntendaClick()
