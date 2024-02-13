@@ -5,7 +5,7 @@
 @using IMC.Services
 @inject NavigationManager navigation
 @inject Microsoft.JSInterop.IJSRuntime JSRuntime
-@inject BmiService bmiService;
+@inject IBmiService BmiService;
 
 <link rel="stylesheet" href="Calculation.razor.css" />
 
@@ -68,7 +68,7 @@
             await JSRuntime.InvokeVoidAsync("alert", "Por favor, preencha todos os campos obrigatórios.");
         }
 
-        bmiService.Adicionar(model);
+        BmiService.Adicionar(model);
     }
 
     private string GetBmiSituation(double bmi)

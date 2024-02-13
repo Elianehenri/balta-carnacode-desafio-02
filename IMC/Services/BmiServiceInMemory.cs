@@ -2,9 +2,9 @@
 
 namespace IMC.Services
 {
-	public class BmiService
+    public class BmiServiceInMemory : IBmiService
     {
-        private readonly List<BMIModel> _models = new List<BMIModel>
+        private readonly List<BMIModel> _models = new()
         {
             new BMIModel
             {
@@ -37,7 +37,6 @@ namespace IMC.Services
 		public List<BMIModel> Listar()
         {
             return _models;
-
         }
 	}
 }
