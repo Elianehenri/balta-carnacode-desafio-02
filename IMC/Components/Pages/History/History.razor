@@ -1,4 +1,8 @@
 ﻿@page "/history"
+@using IMC.Services
+@using IMC.Models
+@inject BmiService BmiService;
+
 
 <link rel="stylesheet" href="History.razor.css" />
 
@@ -32,41 +36,53 @@
 </main>
 
 @code {
-	private List<RegistroHistorico> _bmiHistory = new ();
+	private List<RegistroHistoricoViewModel> _bmiHistory = new ();
 
 	protected override async Task OnInitializedAsync()
 	{
-		_bmiHistory = new List<RegistroHistorico>
-		{
-			new RegistroHistorico
-			{
-				Titulo = "Peso ideal",
-				CssIcone = "custom-icon-verde fa-solid fa-square-check",
-				TextoDataHora = "8m atrás",
-				Texto = "Parabéns, você está no seu peso ideal, continue mantendo este estilo!"
-			},
-			new RegistroHistorico
-			{
-				Titulo = "Sobrepeso",
-				CssIcone = "custom-icon-vermelho fa-solid fa-circle-minus",
-				TextoDataHora = "12/10/2023",
-				Texto = "Estamos quase lá! Faça alguns ajustes para ficar no peso ideal!"
-			},
-			new RegistroHistorico
-			{
-				Titulo = "Abaixo do peso",
-				CssIcone = "custom-icon-vermelho fa-solid fa-circle-minus",
-				TextoDataHora = "12/10/2023",
-				Texto = "Estamos quase lá! Tente comer mais vezes ao longo do dia!"
-			},
-		};
+		var bmis = BmiService.Listar();
+
+		_bmiHistory = bmis
+			.Select(bmi => new RegistroHistoricoViewModel(bmi))
+			.ToList();
 	}
 
-	public class RegistroHistorico
+	public class RegistroHistoricoViewModel
 	{
+		private const string CssIconeOk = "custom-icon-verde fa-solid fa-square-check";
+		private const string CssIconeRuim = "custom-icon-vermelho fa-solid fa-circle-minus";
+
+		private const string MensagemPesoIdeal = "Parabéns, você está no seu peso ideal, continue mantendo este estilo!";
+		private const string MensagemSobrepeso = "Estamos quase lá! Faça alguns ajustes para ficar no peso ideal!";
+		private const string MensagemAbaixoPeso = "Estamos quase lá! Tente comer mais vezes ao longo do dia!";
+
 		public string Titulo {get; set;}
 		public string CssIcone { get; set; }
 		public string TextoDataHora {get; set;}
 		public string Texto { get; set; }
+
+		public RegistroHistoricoViewModel(BMIModel bmi)
+		{
+			var peso = int.Parse(bmi.Peso);
+			Titulo = peso > 60
+				? "Sobrepeso"
+				: "Peso ideal";
+
+			CssIcone = peso > 60
+				? CssIconeOk
+				: CssIconeRuim;
+
+			var data = new DateTime(2024, 02, 12);
+			var dataDif = (DateTime.Now - data);
+			TextoDataHora = dataDif.Hours < 1
+				? $"{dataDif.Minutes}m atrás"
+				: data.ToShortDateString();
+
+			Texto = peso > 80
+				? MensagemSobrepeso
+				: peso > 55
+					? MensagemPesoIdeal
+					: MensagemAbaixoPeso;
+		}
 	}
 }

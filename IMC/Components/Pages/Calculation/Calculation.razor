@@ -1,11 +1,11 @@
-﻿
-
- @page "/"
+﻿@page "/"
 
 @using System.ComponentModel.DataAnnotations
 @using IMC.Models
+@using IMC.Services
 @inject NavigationManager navigation
 @inject Microsoft.JSInterop.IJSRuntime JSRuntime
+@inject BmiService bmiService;
 
 <link rel="stylesheet" href="Calculation.razor.css" />
 
@@ -67,6 +67,8 @@
         {
             await JSRuntime.InvokeVoidAsync("alert", "Por favor, preencha todos os campos obrigatórios.");
         }
+
+        bmiService.Adicionar(model);
     }
 
     private string GetBmiSituation(double bmi)
