@@ -1,11 +1,9 @@
-﻿
-
- @page "/"
+﻿@page "/"
 
 @using System.ComponentModel.DataAnnotations
-@using IMC.Models
 @inject NavigationManager navigation
 @inject Microsoft.JSInterop.IJSRuntime JSRuntime
+@inject ILocalStorageService localStorage 
 
 <link rel="stylesheet" href="Calculation.razor.css" />
 
@@ -15,10 +13,18 @@
 
 <div class="form-container">
     <EditForm Model="@model" OnValidSubmit="HandleSubmit">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
         <div class="input-container">
             <InputText id="input-altura" class="input-text input-spacing" @bind-Value="@model.Altura" placeholder="Altura" />
+            <ValidationMessage For="@(() => model.Altura)" />
+
             <InputText id="input-peso" class="input-text input-spacing" @bind-Value="@model.Peso" placeholder="Peso" />
+            <ValidationMessage For="@(() => model.Peso)" />
+
             <InputText id="input-sexo" class="input-text input-spacing" @bind-Value="@model.Sexo" placeholder="Sexo" />
+            <ValidationMessage For="@(() => model.Sexo)" />
         </div>
 
         <div class="checkbox-container">
@@ -40,12 +46,40 @@
 </div>
 
 @code {
-
-    private BMIModel model = new BMIModel();
+    private BMIModel model = new BMIModel
+        {
+            Altura = null,
+            Peso = null,
+            Sexo = null
+        };
+    private List<BMIModel> savedData = new List<BMIModel>(); // Declaração e inicialização da lista
 
     private async Task HandleSubmit()
     {
-        if (model != null && !string.IsNullOrWhiteSpace(model.Altura) && !string.IsNullOrWhiteSpace(model.Peso))
+        // Verificar se os campos obrigatórios estão preenchidos antes de prosseguir
+        if (string.IsNullOrWhiteSpace(model.Altura) || string.IsNullOrWhiteSpace(model.Peso) || string.IsNullOrWhiteSpace(model.Sexo))
+        {
+            await JSRuntime.InvokeVoidAsync("alert", "Por favor, preencha todos os campos obrigatórios.");
+            return;
+        }
+
+        // Adicionar o novo conjunto de dados ao List e salvar no LocalStorage
+        savedData.Add(model);
+        await localStorage.SetItemAsync("savedData", savedData);
+
+        // Limpar os campos do formulário
+        model.Altura = null;
+        model.Peso = null;
+        model.Sexo = null;
+        model.Mais65Anos = false;
+
+        // Mostrar alerta com o IMC calculado
+        await ShowIMCAlert();
+    }
+
+    private async Task ShowIMCAlert()
+    {
+        if (!string.IsNullOrWhiteSpace(model.Altura) && !string.IsNullOrWhiteSpace(model.Peso))
         {
             if (double.TryParse(model.Altura, out double altura) && double.TryParse(model.Peso, out double peso))
             {
@@ -62,10 +96,6 @@
             {
                 await JSRuntime.InvokeVoidAsync("alert", "Por favor, insira valores válidos para altura e peso.");
             }
-        }
-        else
-        {
-            await JSRuntime.InvokeVoidAsync("alert", "Por favor, preencha todos os campos obrigatórios.");
         }
     }
 
@@ -110,5 +140,4 @@
         // Exibir a mensagem em um alerta usando JavaScript
         await JSRuntime.InvokeVoidAsync("alert", mensagem);
     }
-
 }
