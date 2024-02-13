@@ -6,14 +6,15 @@ namespace IMC.Services
     {
         private readonly List<BMIModel> _models = new();
 
-        public void Adicionar(BMIModel model)
+        public Task AdicionarAsync(BMIModel model)
         {
             _models.Add(model);
+            return Task.CompletedTask;
         }
 
-		public List<BMIModel> Listar()
+		public Task<List<BMIModel>> ListarAsync()
         {
-            return _models;
+            return Task.FromResult(_models);
         }
 	}
 }

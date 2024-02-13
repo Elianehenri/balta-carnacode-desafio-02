@@ -4,6 +4,6 @@ namespace IMC.Services;
 
 public interface IBmiService
 {
-    void Adicionar(BMIModel model);
-    List<BMIModel> Listar();
+    Task AdicionarAsync(BMIModel model);
+    Task<List<BMIModel>> ListarAsync();
 }

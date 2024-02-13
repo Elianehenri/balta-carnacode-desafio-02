@@ -41,9 +41,10 @@
 
 	protected override async Task OnInitializedAsync()
 	{
-		var bmis = BmiService.Listar();
+		var bmis = await BmiService.ListarAsync();
 
 		_bmiHistory = bmis
+			.OrderByDescending(bmi => bmi.DataCalculo)
 			.Select(bmi => new RegistroHistoricoViewModel(bmi))
 			.ToList();
 	}

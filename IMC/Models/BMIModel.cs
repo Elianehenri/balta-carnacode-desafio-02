@@ -1,7 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Reflection;
 
 namespace IMC.Models
 {
+  
     public class BMIModel
     {
         [Required(ErrorMessage = "A altura é obrigatória.")]
@@ -18,33 +20,46 @@ namespace IMC.Models
         public bool Mais65Anos { get; set; }
 
         public DateTime DataCalculo { get; set; }
-        public Double ValorCalculado { get; set; }
+        public double? ImcCalculado { get; set; }
         public BMISituationEnum Situacao { get; set; }
+
+        public void CalcularImc()
+        {
+            if (!double.TryParse(Altura, out var altura) || !double.TryParse(Peso, out var peso)) return;
+
+            var alturaMetros = altura / 100.0;
+            var imc = peso / (alturaMetros * alturaMetros);
+
+            // Preenche as propriedades do modelo
+            ImcCalculado = imc;
+            DataCalculo = DateTime.UtcNow;
+            Situacao = GetSituacao();
+        }
 
         public BMISituationEnum GetSituacao()
 		{
-			if (ValorCalculado < 17.0)
+			if (ImcCalculado < 17.0)
             {
                 return BMISituationEnum.MuitoAbaixoDoPeso;
             }
 
-			if (ValorCalculado >= 17.0 && ValorCalculado < 18.5)
+			if (ImcCalculado >= 17.0 && ImcCalculado < 18.5)
 			{
 				return BMISituationEnum.AbaixoDoPeso;
 			}
-			if (ValorCalculado >= 18.5 && ValorCalculado < 25)
+			if (ImcCalculado >= 18.5 && ImcCalculado < 25)
 			{
 				return BMISituationEnum.PesoNormal;
 			}
-			if (ValorCalculado >= 25 && ValorCalculado < 30)
+			if (ImcCalculado >= 25 && ImcCalculado < 30)
 			{
 				return BMISituationEnum.AcimaDoPeso;
 			}
-			if (ValorCalculado >= 30 && ValorCalculado < 35)
+			if (ImcCalculado >= 30 && ImcCalculado < 35)
 			{
 				return BMISituationEnum.ObesidadeI;
 			}
-			if (ValorCalculado >= 35 && ValorCalculado < 40)
+			if (ImcCalculado >= 35 && ImcCalculado < 40)
 			{
 				return BMISituationEnum.ObesidadeII;
 			}
