@@ -1,8 +1,8 @@
 ﻿@page "/"
 
-@inject NavigationManager Navigation
-@inject IJSRuntime JSRuntime
-@inject IBmiService BmiService;
+@* @inject NavigationManager Navigation *@
+@* @inject IJSRuntime JSRuntime
+@inject IBmiService BmiService; *@
 
 <link rel="stylesheet" href="Calculation.razor.css" />
 
@@ -99,3 +99,5 @@
         await JSRuntime.InvokeVoidAsync("alert", mensagem);
     }
 }
+
+
