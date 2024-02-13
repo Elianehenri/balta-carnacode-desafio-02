@@ -31,17 +31,13 @@ Avançado: Componentizar o cálculo do IMC.
 * Blazor
 
 ### Ferramentas Utilizadas
-* << INFORMAR A IDE UTILIZADA >>
+* Visual Studio
 
 # Recompensa
 <img src="https://baltaio.blob.core.windows.net/temp/carnacode-badge-desafio-02.png" alt="CarnaCode 2024 - Segundo Desafio Completo" width="256" />
 
-
-# Passo a passo do que foi feito no início do projeto
-1. Clone do repositório.
-2. Adição do arquivo .gitignore.
-3. Criação do projeto Blazor: ```dotnet new blazorwasm -o IMC --pwa```
-4. Adição das páginas Calculo.razor e Historico.razor.
-5. Ajuste no cabeçalho das páginas incluindo ```@page "/"``` e ```@page "/historico"``` respectivamente.
-6. Ajuste do cabeçalho de Home.razor para ```@page "/home"``` para que este seja o link dele.
-7. Ajuste no menu para incluir as páginas de cálculo e histórico.
+ ###  Grupo 01
+* [Eliane Henriqueta](https://github.com/Elianehenri)
+* [Pablo Alessandre](https://github.com/pabloalessandre)
+* [Gabriele Felice](https://github.com/gabi-felice-dev)
+* [Julio](https://github.com/mitsugui)

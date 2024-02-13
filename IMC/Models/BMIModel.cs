@@ -22,35 +22,33 @@ namespace IMC.Models
         public BMISituationEnum Situacao { get; set; }
 
         public BMISituationEnum GetSituacao()
-        {
-            if (ValorCalculado < 17.0)
+		{
+			if (ValorCalculado < 17.0)
             {
                 return BMISituationEnum.MuitoAbaixoDoPeso;
             }
-            else if (ValorCalculado >= 17.0 && ValorCalculado < 18.5)
-            {
-                return BMISituationEnum.AbaixoDoPeso;
-            }
-            else if (ValorCalculado >= 18.5 && ValorCalculado < 25)
-            {
-                return BMISituationEnum.PesoNormal;
-            }
-            else if (ValorCalculado >= 25 && ValorCalculado < 30)
-            {
-                return BMISituationEnum.AcimaDoPeso;
-            }
-            else if (ValorCalculado >= 30 && ValorCalculado < 35)
-            {
-                return BMISituationEnum.ObesidadeI;
-            }
-            else if (ValorCalculado >= 35 && ValorCalculado < 40)
-            {
-                return BMISituationEnum.ObesidadeII;
-            }
-            else
-            {
-                return BMISituationEnum.ObesidadeIII;
-            }
-        }
+
+			if (ValorCalculado >= 17.0 && ValorCalculado < 18.5)
+			{
+				return BMISituationEnum.AbaixoDoPeso;
+			}
+			if (ValorCalculado >= 18.5 && ValorCalculado < 25)
+			{
+				return BMISituationEnum.PesoNormal;
+			}
+			if (ValorCalculado >= 25 && ValorCalculado < 30)
+			{
+				return BMISituationEnum.AcimaDoPeso;
+			}
+			if (ValorCalculado >= 30 && ValorCalculado < 35)
+			{
+				return BMISituationEnum.ObesidadeI;
+			}
+			if (ValorCalculado >= 35 && ValorCalculado < 40)
+			{
+				return BMISituationEnum.ObesidadeII;
+			}
+			return BMISituationEnum.ObesidadeIII;
+		}
     }
 }
