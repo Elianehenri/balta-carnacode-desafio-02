@@ -1,11 +1,10 @@
 ﻿@page "/history"
-@using IMC.Services
-@using IMC.Models
-@using IMC.Extensions
+
 @inject IBmiService BmiService;
 
 
 <link rel="stylesheet" href="History.razor.css" />
+
 
 <div class="container">
 	<div class="imagem">
@@ -19,13 +18,16 @@
 		@foreach (var registro in _bmiHistory)
 		{
 			<div class="card">
-				<div class="card-history">
+				@* <div class="card-history">
 					<div class="history-log"></div>
-				</div>
+				</div> *@
 				<div class="card-history-content">
 					<div class="card-history-head">
-						<span class="title">@registro.Titulo <span class=@registro.CssIcone></span></span>
-						<span class="time-history">@registro.TextoDataHora</span>
+						<div class="card-history">
+							<div class="history-log"></div>
+						</div>
+						<div class="title">@registro.Titulo <span class=@registro.CssIcone></span></div>
+						<div class="time-history">@registro.TextoDataHora</div>
 					</div>
 					<div class="text-history">
 						<p>@registro.Texto</p>
@@ -35,6 +37,7 @@
 		}
 	</div>
 </div>
+
 
 @code {
 	private List<RegistroHistoricoViewModel> _bmiHistory = new ();
